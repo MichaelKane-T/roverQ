@@ -1,0 +1,54 @@
+name: Contracts Validation
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate-contracts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install validators
+        run: pip install jsonschema pyyaml
+
+      - name: Validate command schema
+        run: |
+          python - <<EOF
+          import json, jsonschema
+          schema = json.load(open("contracts/command.schema.json"))
+          jsonschema.Draft7Validator.check_schema(schema)
+          print("command.schema.json OK")
+          EOF
+
+      - name: Validate telemetry schema (if present)
+        run: |
+          if [ -f contracts/telemetry.schema.json ]; then
+            python - <<EOF
+            import json, jsonschema
+            schema = json.load(open("contracts/telemetry.schema.json"))
+            jsonschema.Draft7Validator.check_schema(schema)
+            print("telemetry.schema.json OK")
+            EOF
+          else
+            echo "telemetry.schema.json not present, skipping"
+          fi
+
+      - name: Validate states.yaml
+        run: |
+          python - <<EOF
+          import yaml
+          data = yaml.safe_load(open("contracts/states.yaml"))
+          assert "version" in data, "states.yaml missing version field"
+          assert "states" in data, "states.yaml missing states list"
+          assert "failures" in data, "states.yaml missing failures list"
+          print("states.yaml OK")
+          EOF
