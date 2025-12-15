@@ -1,0 +1,16 @@
+# Build artifacts
+.build/
+.pio/
+node_modules/
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Flutter
+.dart_tool/
+build/
+
+# OS
+.DS_Store
