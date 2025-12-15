@@ -1,0 +1,21 @@
+# Rover Sync State Machine Contract
+# This file is the single source of truth for system states and modes
+
+states:
+  - INIT
+  - IDLE
+  - MANUAL
+  - AUTO_CRUISE
+  - AUTO_AVOID
+  - FAILSAFE
+  - FAULT
+
+modes:
+  - MANUAL
+  - AUTO
+
+failures:
+  - RADIO_LOSS
+  - LOW_BATTERY
+  - MPU_TIMEOUT
+  - GPS_FAILURE
