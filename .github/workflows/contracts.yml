@@ -31,16 +31,17 @@ jobs:
 
       - name: Validate telemetry schema (if present)
         run: |
-          if [ -f contracts/telemetry.schema.json ]; then
-            python - <<EOF
-            import json, jsonschema
-            schema = json.load(open("contracts/telemetry.schema.json"))
-            jsonschema.Draft7Validator.check_schema(schema)
-            print("telemetry.schema.json OK")
-            EOF
-          else
-            echo "telemetry.schema.json not present, skipping"
-          fi
+          python - <<EOF
+          import os, json, jsonschema
+
+          path = "contracts/telemetry.schema.json"
+          if os.path.exists(path):
+              schema = json.load(open(path))
+              jsonschema.Draft7Validator.check_schema(schema)
+              print("telemetry.schema.json OK")
+          else:
+              print("telemetry.schema.json not present, skipping")
+          EOF
 
       - name: Validate states.yaml
         run: |
