@@ -1,5 +1,7 @@
 # Rover Sync State Machine Contract
-# This file is the single source of truth for system states and modes
+# Single source of truth for states, modes, and failures
+
+version: 2
 
 states:
   - INIT
@@ -19,3 +21,5 @@ failures:
   - LOW_BATTERY
   - MPU_TIMEOUT
   - GPS_FAILURE
+  - CAMERA_FAILURE
+ 
